@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feed from './Feed';
 import TakeVideo from './TakeVideo';
+import MyCards from './MyCards';
 
 function SettingsScreen() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={Feed} />
         <Tab.Screen name="Add Video" component={TakeVideo} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Settings" component={MyCards} />
       </Tab.Navigator>
     </NavigationContainer>
   );

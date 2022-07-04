@@ -1,9 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
-import { Card, Button, Icon } from "@rneui/themed";
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Button } from "@rneui/themed";
+import { Video } from 'expo-av';
 
+import { uploadVideo } from '../../components/FirebaseProvider';
+
+
+
+async function uriToBlob(uri) {
+    return await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+    });
+}
 
 export default function TakeVideo() {
     const [hasPermission, setHasPermission] = useState(null);
@@ -27,6 +46,14 @@ export default function TakeVideo() {
     }
     if (hasPermission === false) {
         return <Text>No access to camera</Text>;
+    }
+
+    const sendVideo = async () => {
+        const blob = await uriToBlob(currentRecording.uri);
+
+        const file = await uploadVideo(blob);
+
+        
     }
 
     return (
@@ -59,6 +86,11 @@ export default function TakeVideo() {
             }} onPress={async () => {
                 setCurrentRecording({})
             }} />
+
+            <Button title="Send Video" buttonStyle={{
+                backgroundColor: 'rgba(111, 202, 186, 1)',
+                borderRadius: 5,
+            }} onPress={sendVideo} />
 
             {(hasRecordingToShow) ? <Video
                 ref={videRef}
