@@ -1,7 +1,7 @@
 // import React from "react";
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { getFirestore, doc, getDocs, updateDoc, addDoc, collection, increment } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, list } from "firebase/storage";
 
 
@@ -41,18 +41,19 @@ export async function uploadVideo(blob) {
 }
 
 export async function getAllVideos() {
+    const videosRef = collection(db, "Videos");
+    const docSnap = await getDocs(videosRef)
 
-    // Create a reference under which you want to list
-    const storage = getStorage(firebaseApp);
-    const listRef = ref(storage, 'videos/');
+    return docSnap.docs.map(doc => doc.data());
+}
 
-    const firstPage = await list(listRef, { maxResults: 100 });
+export async function changeVoteBy(videoId, quantity) {
+    const videoRef = doc(db, "Videos", videoId);
 
-
-    console.log('fp',firstPage)
-    // const firstPage = await list(listRef);
-
-    // console.log(firstPage)
+    // Atomically increment the population of the city by 50.
+    await updateDoc(videoRef, {
+        voteCount: increment(quantity)
+    });
 }
 
 // const FirebaseContext = React.createContext();
