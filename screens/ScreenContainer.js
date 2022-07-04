@@ -3,12 +3,7 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feed from './Feed';
-
-function AddVideo() {
-  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Add video</Text>
-  </View>
-}
+import TakeVideo from './TakeVideo';
 
 function SettingsScreen() {
   return (
@@ -25,7 +20,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={Feed} />
-        <Tab.Screen name="Add Video" component={AddVideo} />
+        <Tab.Screen name="Add Video" component={TakeVideo} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
