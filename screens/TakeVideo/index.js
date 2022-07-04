@@ -4,7 +4,7 @@ import { Camera, CameraType } from 'expo-camera';
 import { Button } from "@rneui/themed";
 import { Video } from 'expo-av';
 
-import { uploadVideo } from '../../components/FirebaseProvider';
+import { uploadVideo, storage } from '../../components/FirebaseProvider';
 
 
 
@@ -50,10 +50,11 @@ export default function TakeVideo() {
 
     const sendVideo = async () => {
         const blob = await uriToBlob(currentRecording.uri);
-
         const file = await uploadVideo(blob);
+        console.log('file',file)
 
-        
+        // const ref = await storage().refFromURL(url);
+
     }
 
     return (

@@ -1,8 +1,8 @@
 // import React from "react";
 
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getFirestore, doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, list } from "firebase/storage";
 
 
 // import firebaseConfig from "../config/firebase";
@@ -25,10 +25,34 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
+export async function recordVideoCreation(userId = "123123") {
+    const docRef = await addDoc(collection(db, "Videos"), {
+        likeCount: 0,
+        userId
+    });
+    return docRef
+}
+
 export async function uploadVideo(blob) {
-    const videoRef = ref(storage, `videos/${Date.now()}.mov`)
+    const { id } = await recordVideoCreation('123123testId')
+    const videoRef = ref(storage, `videos/${id}.mov`)
     const video = await uploadBytes(videoRef, blob);
     return video;
+}
+
+export async function getAllVideos() {
+
+    // Create a reference under which you want to list
+    const storage = getStorage(firebaseApp);
+    const listRef = ref(storage, 'videos/');
+
+    const firstPage = await list(listRef, { maxResults: 100 });
+
+
+    console.log('fp',firstPage)
+    // const firstPage = await list(listRef);
+
+    // console.log(firstPage)
 }
 
 // const FirebaseContext = React.createContext();
