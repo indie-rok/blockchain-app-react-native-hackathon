@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Text } from 'react-native'
 import { db } from '../../components/FirebaseProvider'
 // import { useCollection } from 'react-firebase-hooks/firestore';=
 
 import { query, collection, getDocs } from "firebase/firestore";
 import { ethers, Wallet } from 'ethers';
-import { Button } from '@rneui/base';
+import { Button, Text as TextTN } from '@rneui/base';
 import testAbi from '../../contracts/abi/test.json'
+import { UserContext } from '../../context/user';
+import Avatar from "react-native-boring-avatars";
 
 
 export default function MyCards() {
 
     // const [value] = useCollection(db, 'Rooms')
+
+    const { user, setUser } = useContext(UserContext)
+
+    async function logout() {
+        setUser(null)
+    }
 
 
     async function test() {
@@ -50,8 +58,23 @@ export default function MyCards() {
     // );
 
     return (
-        <Text>
+        <>
+            <TextTN h1>Profile</TextTN>
+            <Text> Address: {user.address}</Text>
+            <Text>
+                <Avatar
+                    size={200}
+                    name={user.address}
+                    variant="pixel"
+                    colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+                />
+            </Text>
+
+            {/* <Text>{identicon(user.address)}</Text> */}
+
+
             <Button title="Test" onPress={test} />
-        </Text>
+            <Button title="Logout" onPress={logout} />
+        </>
     )
 }
