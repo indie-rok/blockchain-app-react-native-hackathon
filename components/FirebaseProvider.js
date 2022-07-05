@@ -2,7 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDocs, updateDoc, addDoc, collection, increment } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, list } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 
 // import firebaseConfig from "../config/firebase";
@@ -27,16 +27,27 @@ export const storage = getStorage(firebaseApp);
 
 export async function recordVideoCreation(userId = "123123") {
     const docRef = await addDoc(collection(db, "Videos"), {
-        likeCount: 0,
-        userId
+        voteCount: 0,
+        userId,
     });
+
+    updateDoc(docRef, { videoId: docRef.id })
+
     return docRef
 }
 
 export async function uploadVideo(blob) {
-    const { id } = await recordVideoCreation('123123testId')
-    const videoRef = ref(storage, `videos/${id}.mov`)
+    // const { id } = await recordVideoCreation('123123testId')
+    const docRef = await addDoc(collection(db, "Videos"), {
+        voteCount: 0,
+        userId:'123123',
+    });
+
+    console.log("ref", docRef.id)
+
+    const videoRef = ref(storage, `videos/${docRef.id}.mov`)
     const video = await uploadBytes(videoRef, blob);
+    updateDoc(docRef, { videoId: docRef.id, fullUrl: await getDownloadURL(videoRef) })
     return video;
 }
 

@@ -51,10 +51,7 @@ export default function TakeVideo() {
     const sendVideo = async () => {
         const blob = await uriToBlob(currentRecording.uri);
         const file = await uploadVideo(blob);
-        console.log('file',file)
-
-        // const ref = await storage().refFromURL(url);
-
+        
     }
 
     return (
