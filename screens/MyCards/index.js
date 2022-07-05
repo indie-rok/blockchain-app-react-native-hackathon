@@ -24,15 +24,25 @@ export default function MyCards() {
 
     async function test() {
         // Connect to the network
-        let provider = ethers.getDefaultProvider('kovan');
+        let provider = new ethers.providers.InfuraProvider('kovan', {
+            projectId: 'cffe14235e224785880eb18e255b271b',
+            projectSecret: 'b07f6638a9c149d6b7de12b969bf9937'
+        })
+        // .getDefaultProvider('kovan', { infura: 'cffe14235e224785880eb18e255b271b' });
 
         // Load the wallet to deploy the contract with
 
         let wallet = new ethers.Wallet.fromMnemonic("injury network mandate nature sea apology inside exclude pilot lottery pig sand");
 
 
-        const contract = new ethers.Contract("0x03C15104bb46038Fd7818c4A618F529929F3EFaC", testAbi, provider)
-        console.log(contract)
+        const contract = new ethers.Contract("0xe3a865d7501cc6323c6e466c74989bf604918c9c", testAbi, provider)
+
+        console.log(await contract.deployed())
+        
+        // const instance = contract.connect(provider)
+
+        // console.log(await instance.balanceOf('0x3CFd9563d4CD5D052F83D50601b2fD1898496410', 0))
+        // console.log(await contract.)
         // console.log(await contract.balanceOf(wallet.address))
     }
 
