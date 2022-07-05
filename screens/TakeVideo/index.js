@@ -24,7 +24,7 @@ async function uriToBlob(uri) {
     });
 }
 
-export default function TakeVideo() {
+export default function TakeVideo({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(CameraType.front);
     const cameraRef = useRef()
@@ -38,6 +38,7 @@ export default function TakeVideo() {
             const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
+
     }, []);
 
 
@@ -52,6 +53,7 @@ export default function TakeVideo() {
         const blob = await uriToBlob(currentRecording.uri);
         const file = await uploadVideo(blob);
         
+        navigation.navigate('Home')
     }
 
     return (

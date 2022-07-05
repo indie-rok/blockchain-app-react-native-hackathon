@@ -2,6 +2,9 @@ import React, { useEffect, useState, useId } from 'react'
 import { StyleSheet, ScrollView, Text, View } from 'react-native';
 import { Card, Button, Icon } from "@rneui/themed";
 
+import { useFocusEffect } from '@react-navigation/native';
+
+
 
 import { getAllVideos } from '../../components/FirebaseProvider';
 import SingleVideo from './components/SingleVideo';
@@ -9,15 +12,21 @@ import SingleVideo from './components/SingleVideo';
 export default function Feed() {
     const [videoList, setVideoList] = useState([])
 
-    useEffect(() => {
-        async function load() {
-            const videos = await getAllVideos()
-            console.log(videos)
-            setVideoList(videos)
-        }
+    useFocusEffect(
+        React.useCallback(() => {
 
-        load()
-    }, [])
+            async function load() {
+                const videos = await getAllVideos()
+                console.log('videos',videos)
+                setVideoList(videos)
+            }
+            load()
+
+            return () => {
+
+            };
+        }, [])
+    );
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
